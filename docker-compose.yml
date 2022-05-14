@@ -1,0 +1,28 @@
+version: '3.1'
+
+networks:
+  my-network:
+    external: false
+
+services:
+
+  mongodb:
+    image: mongo:4.4.6
+    hostname: mongodb
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017"
+    networks:
+      - my-network
+
+  http-server:
+    image: http-server:latest
+    hostname: http-server
+    volumes:
+      - ./requirements.txt:/requirements.txt
+    ports:
+      - "5000:5000"
+    networks:
+      - my-network
+    depends_on:
+      - mongodb
